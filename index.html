@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Questionnaire de satisfaction — Gedimat</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #00706F;
+      --teal-dark:   #004F4E;
+      --teal-light:  #E0F4F3;
+      --orange:      #D4622A;
+      --orange-light:#FDF0EA;
+      --text:        #1A2B2B;
+      --muted:       #5A7170;
+      --border:      #C8DEDD;
+      --white:       #FFFFFF;
+      --bg:          #F4FAF9;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+    }
+
+    /* ── FOND DÉCORATIF ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 110% -10%, rgba(0,112,111,0.13) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at -10% 110%, rgba(212,98,42,0.08) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      animation: fadeDown 0.5s ease both;
+    }
+
+    .logo-wrap {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,112,111,0.08);
+    }
+
+    .logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.45rem;
+      color: var(--teal-dark);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-tagline {
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-top: 1px;
+    }
+
+    .header-divider {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ── CARD PRINCIPALE ── */
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 4px 6px rgba(0,112,111,0.06),
+        0 20px 40px rgba(0,112,111,0.08);
+      animation: fadeUp 0.55s 0.1s ease both;
+    }
+
+    .card-top {
+      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal) 100%);
+      padding: 1.75rem 1.75rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-top::after {
+      content: '';
+      position: absolute;
+      right: -30px;
+      top: -30px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .card-top::before {
+      content: '';
+      position: absolute;
+      right: 30px;
+      bottom: -50px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #7EEAE9;
+      animation: pulse 2s ease infinite;
+    }
+
+    .card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-subtitle {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.65);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-body { padding: 1.5rem 1.75rem; }
+
+    /* ── INFOS SESSION ── */
+    .session-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.85rem;
+    }
+
+    .info-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      background: var(--teal-light);
+      border-radius: 10px;
+      border-left: 3px solid var(--teal);
+      animation: fadeIn 0.4s ease both;
+    }
+
+    .info-row:nth-child(1) { animation-delay: 0.25s; }
+    .info-row:nth-child(2) { animation-delay: 0.35s; }
+    .info-row:nth-child(3) { animation-delay: 0.45s; }
+    .info-row:nth-child(4) { animation-delay: 0.55s; }
+
+    .info-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .info-content { flex: 1; min-width: 0; }
+
+    .info-key {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--teal);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .info-val {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--teal-dark);
+      word-break: break-word;
+    }
+
+    /* ── RAPPEL ── */
+    .reminder {
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      background: var(--orange-light);
+      border: 1px solid rgba(212,98,42,0.2);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.78rem;
+      color: #8B3A12;
+      line-height: 1.45;
+      animation: fadeIn 0.4s 0.6s ease both;
+    }
+
+    .reminder-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── BOUTON ── */
+    .btn-wrap {
+      animation: fadeIn 0.4s 0.7s ease both;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      box-shadow: 0 4px 14px rgba(0,112,111,0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,112,111,0.4);
+      filter: brightness(1.07);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    .btn-arrow {
+      font-size: 1.1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .btn:hover .btn-arrow { transform: translateX(4px); }
+
+    /* ── FOOTER CARD ── */
+    .card-footer {
+      border-top: 1px solid var(--border);
+      padding: 0.9rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .footer-dot { color: var(--border); }
+
+    /* ── PAGE FOOTER ── */
+    .page-footer {
+      margin-top: 1.75rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+      animation: fadeIn 0.4s 0.9s ease both;
+    }
+
+    /* ── ÉTAT ERREUR ── */
+    .error-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--white);
+      border: 1.5px solid #FFCDD2;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .error-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .error-title { font-size: 1.1rem; font-weight: 600; color: #C62828; margin-bottom: 0.5rem; }
+    .error-msg { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-wrap">
+      <div>
+        <div class="logo-text">Gedimat</div>
+        <div class="logo-tagline">Au cœur de l'ouvrage</div>
+      </div>
+    </div>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- CONTENU DYNAMIQUE -->
+  <div id="content"></div>
+
+  <div class="page-footer">
+    Gedimat — Formation professionnelle &nbsp;·&nbsp; Questionnaire confidentiel
+  </div>
+
+</div>
+
+<script>
+  // ── Lecture des paramètres URL ──────────────────────────────────────────────
+  const params  = new URLSearchParams(window.location.search);
+  const module  = params.get('module');
+  const date    = params.get('date');
+  const lieu    = params.get('lieu');
+  const formateur = params.get('formateur');
+  const formUrl = "https://forms.office.com/e/2eMm6MXJYJ";
+
+  const container = document.getElementById('content');
+
+  // ── Vérification paramètres ─────────────────────────────────────────────────
+  if (!module || !date) {
+    container.innerHTML = `
+      <div class="error-card">
+        <div class="error-icon">⚠️</div>
+        <div class="error-title">Lien invalide</div>
+        <div class="error-msg">
+          Ce QR code ne contient pas les informations de session.<br>
+          Merci de contacter votre formateur.
+        </div>
+      </div>`;
+  } else {
+
+    // ── Affichage de la fiche session ─────────────────────────────────────────
+    const rows = [
+      { icon: '📚', key: 'Formation',  val: decodeURIComponent(module) },
+      { icon: '📅', key: 'Date',       val: decodeURIComponent(date) },
+      { icon: '📍', key: 'Lieu',       val: lieu    ? decodeURIComponent(lieu)      : '—' },
+      { icon: '👤', key: 'Formateur',  val: formateur ? decodeURIComponent(formateur) : '—' },
+    ];
+
+    const infoRows = rows.map(r => `
+      <div class="info-row">
+        <span class="info-icon">${r.icon}</span>
+        <div class="info-content">
+          <div class="info-key">${r.key}</div>
+          <div class="info-val">${r.val}</div>
+        </div>
+      </div>`).join('');
+
+    container.innerHTML = `
+      <div class="card">
+        <div class="card-top">
+          <div class="badge"><span class="badge-dot"></span>Évaluation de formation</div>
+          <div class="card-title">Questionnaire de satisfaction</div>
+          <div class="card-subtitle">Quelques minutes pour améliorer vos formations</div>
+        </div>
+
+        <div class="card-body">
+          <div class="session-label">Votre session</div>
+          <div class="info-grid">${infoRows}</div>
+
+          <div class="reminder">
+            <span class="reminder-icon">💡</span>
+            <span>Vérifiez que les informations ci-dessus correspondent bien à votre formation, puis accédez au questionnaire.</span>
+          </div>
+
+          <div class="btn-wrap">
+            <a class="btn" href="${formUrl}" target="_blank" rel="noopener">
+              Accéder au questionnaire
+              <span class="btn-arrow">→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <span>Réponses anonymes</span>
+          <span class="footer-dot">·</span>
+          <span>Données confidentielles</span>
+          <span class="footer-dot">·</span>
+          <span>Microsoft Forms</span>
+        </div>
+      </div>`;
+  }
+</script>
+</body>
+</html>
